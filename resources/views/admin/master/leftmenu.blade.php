@@ -8,20 +8,37 @@
     <!-- LOGO -->
     <a href="{{ route('dashboard') }}" class="logo text-center logo-light">
         <span class="logo-lg">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @if ($setting)
+                <img src="{{ asset($setting->logo) }}" alt="" height="50">
+            @else
+                <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @endif
+
         </span>
         <span class="logo-sm">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @if ($setting)
+                <img src="{{ asset($setting->logo) }}" alt="" height="50">
+            @else
+                <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @endif
         </span>
     </a>
 
     <!-- LOGO -->
     <a href="{{ route('dashboard') }}" class="logo text-center logo-dark">
         <span class="logo-lg">
-            <img src="{{ asset('assets/img/logo-black.png') }}" alt="" height="16">
+            @if ($setting)
+                <img src="{{ asset($setting->logo) }}" alt="" height="50">
+            @else
+                <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @endif
         </span>
         <span class="logo-sm">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="" height="16">
+            @if ($setting)
+                <img src="{{ asset($setting->logo) }}" alt="" height="50">
+            @else
+                <img src="{{ asset('assets/img/logo.png') }}" alt="" height="50">
+            @endif
         </span>
     </a>
 

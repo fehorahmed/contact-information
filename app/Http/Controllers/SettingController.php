@@ -88,7 +88,7 @@ class SettingController extends Controller
         $setting->phone = $request->phone;
         $setting->email = $request->email;
         $setting->address = $request->address;
-        saveImage('logo', $setting->logo);
+        $setting->logo =  saveImage('logo', $request->logo, 200, 80);
         if ($setting->save()) {
             return redirect()->back()->with('success', 'Setting update successfully.');
         } else {

@@ -3,7 +3,7 @@
     {{ isset($pageTitle) ? $pageTitle : 'Application Setting' }}
 @endsection
 @section('content')
-    @include('admin.master.flash')
+    {{-- @include('admin.master.flash') --}}
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -87,7 +87,13 @@
                                             @error('file')
                                                 <div class="help-block text-danger">{{ $message }} </div>
                                             @enderror
+                                            @if ($setting->logo)
+                                                <img src="{{ asset($setting->logo) }}" class="mt-1" alt=""
+                                                    width="200" height="80">
+                                            @endif
                                         </div>
+
+
 
                                     </div>
                                 </div>
