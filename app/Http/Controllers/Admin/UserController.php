@@ -12,19 +12,19 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->middleware(function ($request, $next) {
-//            $this->project = Auth::user()->role;
-//
-//            if ($this->project!=3){
-//                return redirect()->back()->with('error','You are not authorized.');
-//            }else{
-//                return $next($request);
-//            }
-//
-//        });
-//    }
+    //    public function __construct()
+    //    {
+    //        $this->middleware(function ($request, $next) {
+    //            $this->project = Auth::user()->role;
+    //
+    //            if ($this->project!=3){
+    //                return redirect()->back()->with('error','You are not authorized.');
+    //            }else{
+    //                return $next($request);
+    //            }
+    //
+    //        });
+    //    }
     /**
      * Display a listing of the resource.
      *
@@ -33,8 +33,22 @@ class UserController extends Controller
     public function index()
     {
 
-        $datas=User::all();
-        return view('admin.user.index',compact('datas'));
+        $datas = User::where('role', '!=', 1)->get();
+        return view('admin.user.index', compact('datas'));
+    }
+    public function registration()
+    {
+
+        $datas = User::where(['registration_status' => 'Applied', 'role' => 1])->paginate();
+        $divisions = Division::all();
+        return view('admin.application.index', compact('datas', 'divisions'));
+    }
+    public function approvedUser()
+    {
+
+        $datas = User::where(['registration_status' => 'Approved', 'role' => 1])->paginate();
+        $divisions = Division::all();
+        return view('admin.application.index', compact('datas', 'divisions'));
     }
 
     /**
@@ -44,8 +58,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $divisions= Division::all();
-        return view('admin.user.create',compact('divisions'));
+        $divisions = Division::all();
+        return view('admin.user.create', compact('divisions'));
     }
 
     /**
@@ -56,45 +70,40 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $rules=[
-            'name'=>'required|string',
-            'email'=>'required|email|unique:users,email',
-            'password'=>'required|string|min:6|max:20|confirmed',
-            'phone'=>'required|string|max:20',
-            'role'=>'required|numeric',
-            'division'=>'required|numeric',
-            'district'=>'required|numeric',
-            'sub_district'=>'required|numeric',
+        $rules = [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|max:20|confirmed',
+            'phone' => 'required|string|max:20',
+            'role' => 'required|numeric',
+            'division' => 'required|numeric',
+            'district' => 'required|numeric',
+            'sub_district' => 'required|numeric',
         ];
-        if ($request->role==1||$request->role==2){
-            $rules['user_type']='required|numeric';
-        }
 
 
 
-        $validate= Validator::make($request->all(),$rules);
+        $validate = Validator::make($request->all(), $rules);
 
-        if ($validate->fails()){
+        if ($validate->fails()) {
             return redirect()->back()->withInput()->withErrors($validate);
         }
 
 
-        $data= new User();
-        $data->name=$request->name;
-        $data->email=$request->email;
-        $data->password=Hash::make($request->password);
-        $data->phone=$request->phone;
-        $data->role=$request->role;
-        $data->division_id=$request->division;
-        $data->district_id=$request->district;
-        $data->sub_district_id=$request->sub_district;
-        $data->status=1;
+        $data = new User();
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->password = Hash::make($request->password);
+        $data->phone = $request->phone;
+        $data->role = $request->role;
+        $data->division_id = $request->division;
+        $data->district_id = $request->district;
+        $data->sub_district_id = $request->sub_district;
+        $data->status = 1;
 
         $data->save();
 
-        return redirect()->route('admin.user.index')->with('success','User Successfully added.');
-
-
+        return redirect()->route('admin.user.index')->with('success', 'User Successfully added.');
     }
 
     /**
@@ -116,8 +125,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user= User::find($id);
-        return view('admin.user.edit',compact('user'));
+        $user = User::find($id);
+        return view('admin.user.edit', compact('user'));
     }
 
     /**
@@ -143,7 +152,8 @@ class UserController extends Controller
         //
     }
 
-    public function changeStatus(Request $request){
+    public function changeStatus(Request $request)
+    {
         $validate = Validator::make($request->all(), [
             'id' => 'required|numeric'
         ]);
@@ -153,11 +163,11 @@ class UserController extends Controller
                 'message' => $validate->errors()->first(),
             ]);
         }
-        $data= User::find($request->id);
-        if ($data->status==1){
-            $data->status=0;
-        }elseif ($data->status==0){
-            $data->status=1;
+        $data = User::find($request->id);
+        if ($data->status == 1) {
+            $data->status = 0;
+        } elseif ($data->status == 0) {
+            $data->status = 1;
         }
         $data->save();
         return response([

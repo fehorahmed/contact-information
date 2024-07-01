@@ -26,16 +26,15 @@
                     </div>
                     <div class="card-body">
                         <form id="campaign-form" class="form-horizontal" method="post"
-                              action="{{route('admin.user.store')}}"
-                              enctype="multipart/form-data">
+                            action="{{ route('admin.user.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row mb-3">
                                 <label for="name" class="col-12 col-md-3 col-form-label">Name</label>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" name="name" id="name" value="{{old('name')}}"
-                                           class="form-control" placeholder="User name">
+                                    <input type="text" name="name" id="name" value="{{ old('name') }}"
+                                        class="form-control" placeholder="User name">
                                     @error('name')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -44,10 +43,10 @@
                             <div class="row mb-3">
                                 <label for="email" class="col-12 col-md-3 col-form-label">Email</label>
                                 <div class="col-12 col-md-9">
-                                    <input type="email" name="email" value="{{old('email')}}"
-                                           id="email" class="form-control" placeholder="User email">
+                                    <input type="email" name="email" value="{{ old('email') }}" id="email"
+                                        class="form-control" placeholder="User email">
                                     @error('email')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -56,9 +55,9 @@
                                 <label for="example-select" class="col-12 col-md-3 col-form-label">Password</label>
                                 <div class="col-12 col-md-9">
                                     <input type="password" name="password" value="" id="password"
-                                           class="form-control" placeholder="User password">
+                                        class="form-control" placeholder="User password">
                                     @error('password')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -68,10 +67,9 @@
                                     Password</label>
                                 <div class="col-12 col-md-9">
                                     <input type="password" name="password_confirmation" value=""
-                                           id="password_confirmation"
-                                           class="form-control" placeholder="Confirm password">
+                                        id="password_confirmation" class="form-control" placeholder="Confirm password">
                                     @error('password_confirmation')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -79,25 +77,25 @@
                             <div class="row mb-3">
                                 <label for="example-select" class="col-12 col-md-3 col-form-label">User Phone</label>
                                 <div class="col-12 col-md-9">
-                                    <input type="number" name="phone" id="phone" value="{{old('phone')}}"
-                                           class="form-control" placeholder="User phone number">
+                                    <input type="number" name="phone" id="phone" value="{{ old('phone') }}"
+                                        class="form-control" placeholder="User phone number">
                                     @error('phone')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="example-select"
-                                       class="col-12 col-md-3 col-form-label">Division</label>
+                                <label for="example-select" class="col-12 col-md-3 col-form-label">Division</label>
                                 <div class="col-12 col-md-9">
                                     <select name="division" id="division" class="form-select">
                                         <option value="">Select Division</option>
-                                        @foreach($divisions as $division)
-                                            <option {{old('division')==$division->id?'selected':''}} value="{{$division->id}}">{{$division->name}}</option>
+                                        @foreach ($divisions as $division)
+                                            <option {{ old('division') == $division->id ? 'selected' : '' }}
+                                                value="{{ $division->id }}">{{ $division->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('division')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -109,7 +107,7 @@
                                         <option value="">Select District</option>
                                     </select>
                                     @error('district')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -121,7 +119,7 @@
                                         <option value="">Select Upazila</option>
                                     </select>
                                     @error('sub_district')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -131,14 +129,13 @@
                                 <div class="col-12 col-md-9">
                                     <select name="role" id="role" class="form-select">
                                         <option value="">Select One</option>
-                                        <option {{old('role')==1?'selected':''}} value="1">Union User</option>
-                                        <option {{old('role')==2?'selected':''}} value="2">Sub District Admin</option>
-                                        <option {{old('role')==3?'selected':''}} value="3">District Admin</option>
-                                        <option {{old('role')==4?'selected':''}} value="4">Division Admin</option>
-                                        <option {{old('role')==5?'selected':''}} value="5">Country Admin</option>
+                                        <option {{ old('role') == 1 ? 'selected' : '' }} value="1">User</option>
+                                        <option {{ old('role') == 2 ? 'selected' : '' }} value="2"> Admin</option>
+                                        <option {{ old('role') == 3 ? 'selected' : '' }} value="3">Super Admin</option>
+
                                     </select>
                                     @error('role')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
@@ -146,7 +143,7 @@
 
 
                             <div class="text-center mb-3">
-                                <a href="{{route('admin.user.index')}}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Back</a>
                                 <input type="submit" class="btn btn-primary  " value="Add User">
                             </div>
                         </form>
@@ -159,9 +156,8 @@
     </div>
 @endsection
 @push('scripts')
-
     <script>
-        $(function () {
+        $(function() {
             var districtSelected = '{{ old('district') }}'
             $('#division').on('change', function() {
                 var division_id = $(this).val();
@@ -206,7 +202,7 @@
                         $.each(data, function(index, item) {
                             if (subDistrictSelected == item.id) {
                                 $('#sub_district').append('<option selected value="' + item
-                                        .id +
+                                    .id +
                                     '" selected>' + item.name + '</option>');
                             } else {
                                 $('#sub_district').append('<option value="' + item.id +
@@ -221,5 +217,4 @@
             $('#district').trigger('change');
         });
     </script>
-
 @endpush

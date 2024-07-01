@@ -75,10 +75,50 @@
             {{--            section Application --}}
             <li class="side-nav-title side-nav-item">Application</li>
 
+            {{-- <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false"
+                    aria-controls="sidebarDashboards" class="side-nav-link">
+                    <i class="uil-home-alt"></i>
+                    <span class="badge bg-success float-end">4</span>
+                    <span> Dashboards </span>
+                </a>
+                <div class="collapse" id="sidebarDashboards">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="dashboard-analytics.html">Analytics</a>
+                        </li>
+                        <li>
+                            <a href="dashboard-crm.html">CRM</a>
+                        </li>
+                        <li>
+                            <a href="index.html">Ecommerce</a>
+                        </li>
+                        <li>
+                            <a href="dashboard-projects.html">Projects</a>
+                        </li>
+                    </ul>
+                </div>
+            </li> --}}
             <li class="side-nav-item">
-                <a href="{{ route('admin.complain.index') }}" class="side-nav-link">
+                <a href="{{ route('admin.registration.index') }}" class="side-nav-link">
                     <i class="uil-calender"></i>
-                    <span> Applications </span>
+                    <span>Registration List </span>
+                </a>
+
+            </li>
+            <li class="side-nav-item">
+                <a href="{{ route('admin.approved.index') }}" class="side-nav-link">
+                    <i class="uil-calender"></i>
+                    <span>Approved List </span>
+                </a>
+            </li>
+
+            <li class="side-nav-title side-nav-item">Configuration</li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('admin.config.profession.index') }}" class="side-nav-link">
+                    <i class="uil uil-tachometer-fast"></i>
+                    <span> Profession List </span>
                 </a>
             </li>
 

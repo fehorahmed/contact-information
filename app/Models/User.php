@@ -29,9 +29,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    public function district(){
-        return $this->belongsTo(District::class,'district_id');
-    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -63,5 +61,20 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'division_id');
+    }
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
+    public function upazila()
+    {
+        return $this->belongsTo(Upazila::class, 'sub_district_id');
+    }
+    public function union()
+    {
+        return $this->belongsTo(Union::class, 'union_id');
+    }
 }

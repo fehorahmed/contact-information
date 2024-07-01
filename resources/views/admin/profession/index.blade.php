@@ -1,6 +1,6 @@
 @extends('admin.app')
 @section('title')
-    {{ isset($pageTitle) ? $pageTitle : 'Complain User' }}
+    {{ isset($pageTitle) ? $pageTitle : 'Profession List' }}
 @endsection
 
 @push('styles')
@@ -17,13 +17,11 @@
                     <div class="page-title-right">
                         <div class="d-flex">
 
-                            <a href="{{ route('admin.user.export') }}" class="btn btn-primary ms-2">
-                                Export
-                            </a>
+
 
                         </div>
                     </div>
-                    <h4 class="page-title">User List</h4>
+                    <h4 class="page-title">Profession List</h4>
                 </div>
             </div>
         </div>
@@ -35,11 +33,12 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">
-                                <h4>Users</h4>
+                                <h4>Profession</h4>
                             </div>
                             <div class="col-4"></div>
                             <div class="col-2 content-end">
-                                <a href="{{ route('admin.user.create') }}" class="btn btn-primary">Create User</a>
+                                <a href="{{ route('admin.config.profession.create') }}" class="btn btn-primary">Create
+                                    Profession</a>
                             </div>
                         </div>
                     </div>
@@ -49,36 +48,16 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>District</th>
-
-                                    <th>User Role</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($datas as $data)
+                                @foreach ($professions as $data)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data->name }}</td>
-                                        <td>{{ $data->email }}</td>
-                                        <td>{{ $data->phone }}</td>
-                                        <td>{{ $data->district->name ?? '' }}</td>
 
-                                        <td>
-                                            @if ($data->role == 1)
-                                                User
-                                            @endif
-                                            @if ($data->role == 2)
-                                                Admin
-                                            @endif
-                                            @if ($data->role == 3)
-                                                Super Admin
-                                            @endif
-
-                                        </td>
                                         <td>
                                             @if ($data->status == 1)
                                                 <span class="btn btn-success">Active</span>
@@ -87,14 +66,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if (\Illuminate\Support\Facades\Auth::id() == $data->id)
-                                                <span class="btn btn-warning">Self</span>
-                                            @else
-                                                <button data-id="{{ $data->id }}"
-                                                    class="btn btn-primary btn-status-change">
-                                                    Change Status
-                                                </button>
-                                            @endif
+                                            <a class="btn btn-primary"
+                                                href="{{ route('admin.config.profession.edit', $data->id) }}">Edit</button>
                                         </td>
 
                                     </tr>

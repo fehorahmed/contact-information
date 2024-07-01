@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ComplainController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\SettingController;
 
 /*
@@ -18,10 +20,11 @@ use App\Http\Controllers\SettingController;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('login');
-    // return view('welcome');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+//     // return view('welcome');
+// });
+Route::get('/', [HomeController::class, 'home'])->name('admin.registration.index');
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware([
     'auth:sanctum',
@@ -38,25 +41,27 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
     Route::get('get-unions', [\App\Http\Controllers\UnionController::class, 'getUnionBySubDistrict'])->name('get.unions');
 
 
-    Route::group(['prefix' => 'complain'], function () {
-        Route::get('/', [SettingController::class, 'index'])->name('admin.complain.index');
-        Route::get('/create', [SettingController::class, 'create'])->name('admin.complain.create');
-        Route::post('/create', [SettingController::class, 'store'])->name('admin.complain.store');
-        Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('admin.complain.edit');
-        Route::post('/edit/{id}', [SettingController::class, 'update'])->name('admin.complain.update');
-        Route::get('/{id}/view', [SettingController::class, 'view'])->name('admin.complain.view');
-        Route::get('/export', [SettingController::class, 'export'])->name('admin.complain.export');
-        Route::post('/note-store', [SettingController::class, 'noteStore'])->name('admin.complain.note-store');
+    Route::group(['prefix' => 'registration'], function () {
+        Route::get('/', [UserController::class, 'registration'])->name('admin.registration.index');
+        // Route::get('/create', [SettingController::class, 'create'])->name('admin.complain.create');
+        // Route::post('/create', [SettingController::class, 'store'])->name('admin.complain.store');
+        // Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('admin.complain.edit');
+        // Route::post('/edit/{id}', [SettingController::class, 'update'])->name('admin.complain.update');
+        // Route::get('/{id}/view', [SettingController::class, 'view'])->name('admin.complain.view');
+        // Route::get('/export', [SettingController::class, 'export'])->name('admin.complain.export');
+        // Route::post('/note-store', [SettingController::class, 'noteStore'])->name('admin.complain.note-store');
+    });
+    Route::group(['prefix' => 'approved'], function () {
+        Route::get('/', [UserController::class, 'approvedUser'])->name('admin.approved.index');
     });
     Route::group(['prefix' => 'configure'], function () {
 
-        Route::group(['prefix' => 'training-venue'], function () {
-            Route::get('/', [SettingController::class, 'index'])->name('admin.config.training-venue.index');
-            Route::get('/create', [SettingController::class, 'create'])->name('admin.config.training-venue.create');
-            Route::post('/create', [SettingController::class, 'store'])->name('admin.config.training-venue.store');
-            Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('admin.config.training-venue.edit');
-            Route::post('/edit/{id}', [SettingController::class, 'update'])->name('admin.config.training-venue.update');
-            Route::get('/export', [SettingController::class, 'export'])->name('admin.config.training-venue.export');
+        Route::group(['prefix' => 'profession'], function () {
+            Route::get('/', [ProfessionController::class, 'index'])->name('admin.config.profession.index');
+            Route::get('/create', [ProfessionController::class, 'create'])->name('admin.config.profession.create');
+            Route::post('/create', [ProfessionController::class, 'store'])->name('admin.config.profession.store');
+            Route::get('/edit/{id}', [ProfessionController::class, 'edit'])->name('admin.config.profession.edit');
+            Route::post('/edit/{id}', [ProfessionController::class, 'update'])->name('admin.config.profession.update');
         });
     });
     Route::group(['prefix' => 'setting'], function () {
@@ -65,9 +70,7 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
         Route::post('/update', [SettingController::class, 'update'])->name('admin.setting.update');
     });
 
-
-
-    Route::group(['middleware' => ['isCountryAdmin:web'], 'prefix' => 'user'], function () {
+    Route::group(['prefix' => 'admin'], function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
         Route::get('/create', [UserController::class, 'create'])->name('admin.user.create');
         Route::post('/create', [UserController::class, 'store'])->name('admin.user.store');
