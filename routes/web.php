@@ -24,7 +24,9 @@ use App\Http\Controllers\SettingController;
 //     return redirect()->route('login');
 //     // return view('welcome');
 // });
-Route::get('/', [HomeController::class, 'home'])->name('admin.registration.index');
+Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::post('/user-registration', [UserController::class, 'userRegistration'])->name('user.registration');
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware([
     'auth:sanctum',

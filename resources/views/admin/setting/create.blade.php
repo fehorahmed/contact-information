@@ -87,8 +87,8 @@
                                             @error('file')
                                                 <div class="help-block text-danger">{{ $message }} </div>
                                             @enderror
-                                            @if ($setting->logo)
-                                                <img src="{{ asset($setting->logo) }}" class="mt-1" alt=""
+                                            @if ($setting && $setting->logo)
+                                                <img src="{{ asset($setting->logo ?? '') }}" class="mt-1" alt=""
                                                     width="200" height="80">
                                             @endif
                                         </div>

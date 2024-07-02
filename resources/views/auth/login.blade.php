@@ -52,10 +52,19 @@
 <html lang="en">
 
 <!-- Mirrored from coderthemes.com/hyper/saas/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 16 Aug 2022 04:14:40 GMT -->
+@php
+    $setting = \App\Models\Setting::first();
+@endphp
 
 <head>
     <meta charset="utf-8" />
-    <title>Log In | Complain-DOE Project</title>
+    <title>
+        @if ($setting && $setting->name)
+            {{ $setting->name }}
+        @else
+            Landing Page | Hyper - Responsive Bootstrap 5 Admin Dashboard
+        @endif
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
@@ -77,21 +86,31 @@
 
                         <!-- Logo -->
                         <div class="card-header pt-4 pb-4 text-center bg-primary">
-                            {{--                        <a href="index.html"> --}}
-                            {{--                            <span><img src="assets/images/logo.png" alt="" height="18"></span> --}}
-                            {{--                        </a> --}}
+                            <a href="{{ route('home') }}">
+                                @if ($setting)
+                                    <span><img src="{{ asset($setting->logo) }}" alt="" height="50"></span>
+                                @else
+                                    <span><img src="assets/images/logo.png" alt="" height="18"></span>
+                                @endif
+
+                            </a>
                         </div>
 
-                        <div class="card-body p-4">
+                        <div class="card-body p-3">
 
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.
-                                </p>
+                                {{-- <p class="text-muted mb-4">Enter your email address and password to access admin panel.
+                                </p> --}}
                                 <x-jet-validation-errors class="mb-4" />
                                 @if (session('status'))
                                     <div class="mb-4 font-medium text-sm text-green-600">
                                         {{ session('status') }}
+                                    </div>
+                                @endif
+                                @if (session('success'))
+                                    <div class="mb-4 font-medium text-sm text-green-600">
+                                        {{ session('success') }}
                                     </div>
                                 @endif
                             </div>

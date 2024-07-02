@@ -175,4 +175,32 @@ class UserController extends Controller
             'message' => 'Status change successful.',
         ]);
     }
+
+    public function userRegistration(Request $request)
+    {
+
+        $request->validate([
+            "name" => 'required|string|max:255',
+            "father_name" => 'required|string|max:255',
+            "email" => 'required|email|unique:users,email',
+            "phone" => 'required|numeric|unique:users,phone',
+            "password" => 'required|string|min:8|confirmed',
+            "date_of_birth" => 'required|date',
+            "nid" => 'required|string|max:255',
+        ]);
+        // dd($request->all());
+        $user = new User();
+        $user->name = $request->name;
+        $user->father_name = $request->father_name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->date_of_birth = $request->date_of_birth;
+        $user->nid = $request->nid;
+        $user->registration_status = 'Applied';
+        if ($user->save()) {
+            return redirect()->route('login')->with('success', 'Registration Successfull. Please Login');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Something went wrong.');
+        }
+    }
 }
