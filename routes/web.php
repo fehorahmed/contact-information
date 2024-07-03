@@ -29,13 +29,15 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::post('/user-registration', [UserController::class, 'userRegistration'])->name('user.registration');
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware([
-    'auth:sanctum',
+    'auth:sanctum', 'admin.check',
     config('jetstream.auth_session'),
     'verified'
 ])->name('dashboard');
+Route::group(['middleware' => ['auth:web']], function () {
+    Route::get('/my_profile', [UserController::class, 'userProfile'])->name('user.profile');
+});
 
-
-Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['auth:web', 'admin.check'], 'prefix' => 'admin'], function () {
 
     //Common
     Route::get('get-district', [\App\Http\Controllers\DistrictController::class, 'getDistrictByDivision'])->name('get.district');

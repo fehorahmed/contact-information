@@ -32,7 +32,7 @@
 <body class="loading" data-layout-config='{"darkMode":false}'>
 
     <!-- NAVBAR START -->
-    <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
+    <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark" style="background-color: #2c8ef8;">
         @include('front.layout.navbar')
     </nav>
     <!-- NAVBAR END -->

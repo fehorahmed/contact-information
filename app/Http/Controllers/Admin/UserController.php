@@ -203,4 +203,11 @@ class UserController extends Controller
             return redirect()->back()->withInput()->with('error', 'Something went wrong.');
         }
     }
+    public function userProfile()
+    {
+
+        $user = auth()->user();
+        $divisions = Division::all();
+        return view('front.my_profile', compact('user', 'divisions'));
+    }
 }

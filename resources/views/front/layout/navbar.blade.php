@@ -27,22 +27,62 @@
                 <a class="nav-link" href="">Contact</a>
             </li>
         </ul>
+        @if (Route::has('login'))
+            <ul class="navbar-nav ms-auto align-items-center">
+                @auth
+                    @if (auth()->user()->role == 1)
+                        <li class="nav-item me-0">
+                            <a href="{{ route('user.profile') }}" class="nav-link d-lg-none">Profile</a>
+                            <a href="{{ route('user.profile') }}"
+                                class="btn btn-sm btn-info btn-rounded d-none d-lg-inline-flex">Profile
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item me-0">
+                            <a href="{{ route('dashboard') }}" class="nav-link d-lg-none">Dashboard</a>
+                            <a href="{{ route('dashboard') }}"
+                                class="btn btn-sm btn-info btn-rounded d-none d-lg-inline-flex">Dashboard
+                            </a>
+                        </li>
+                    @endif
 
+                    <li class="nav-item me-0">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a href="{{ route('logout') }}" class="nav-link d-lg-none"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                Logout
+                            </a>
+                            <a href="{{ route('logout') }}"
+                                class="btn btn-sm btn-danger btn-rounded d-none d-lg-inline-flex"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                Logout
+                            </a>
+                        </form>
+                    </li>
+                @else
+                    @if (Route::has('register'))
+                        <li class="nav-item me-0">
+                            <a href="{{ route('register') }}" class="nav-link d-lg-none">Registration</a>
+                            <a href="{{ route('register') }}"
+                                class="btn btn-sm btn-info btn-rounded d-none d-lg-inline-flex">Registration
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-item me-0">
+                        <a href="{{ route('login') }}" class="nav-link d-lg-none">Login</a>
+                        <a href="{{ route('login') }}"
+                            class="btn btn-sm btn-secondary btn-rounded d-none d-lg-inline-flex">Login
+                        </a>
+                    </li>
+
+                @endauth
+            </ul>
+        @endif
         <!-- right menu -->
-        <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item me-0">
-                <a href="{{ route('register') }}" class="nav-link d-lg-none">Registration</a>
-                <a href="{{ route('register') }}"
-                    class="btn btn-sm btn-info btn-rounded d-none d-lg-inline-flex">Registration
-                </a>
-            </li>
-            <li class="nav-item me-0">
-                <a href="{{ route('login') }}" class="nav-link d-lg-none">Login</a>
-                <a href="{{ route('login') }}"
-                    class="btn btn-sm btn-secondary btn-rounded d-none d-lg-inline-flex">Login
-                </a>
-            </li>
-        </ul>
+
+
+
 
     </div>
 </div>
