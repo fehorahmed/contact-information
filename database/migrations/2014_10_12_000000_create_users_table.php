@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('father_name')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('nid')->nullable();
-            $table->foreignId('profession')->nullable();
+            $table->foreignId('profession_id')->nullable();
             $table->string('designation')->nullable();
             //Present
             $table->foreignId('division_id')->nullable();

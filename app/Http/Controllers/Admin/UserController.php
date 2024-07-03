@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Division;
+use App\Models\Profession;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -208,6 +209,7 @@ class UserController extends Controller
 
         $user = auth()->user();
         $divisions = Division::all();
-        return view('front.my_profile', compact('user', 'divisions'));
+        $professions = Profession::all();
+        return view('front.my_profile', compact('user', 'divisions', 'professions'));
     }
 }
