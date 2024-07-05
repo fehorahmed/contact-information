@@ -39,10 +39,10 @@ class ProfessionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:profession,name',
+            'name' => 'required|string|unique:professions,name',
             'status' => 'required|boolean',
         ]);
-
+        // dd($request->all());
         $profession = new Profession();
         $profession->name = $request->name;
         $profession->status = $request->status;

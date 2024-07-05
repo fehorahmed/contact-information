@@ -133,14 +133,10 @@
                                         <td>{{ $data->perUnion->name ?? '' }}</td>
                                         <td>{{ $data->per_address ?? '' }}</td>
                                         <td>{{ $data->registration_status ?? '' }}</td>
-
-
                                         <td>
 
                                             <button class="btn btn-primary btn-sm mt-1 status-btn">Change Status</button>
                                         </td>
-
-
                                     </tr>
                                 @endforeach
                             </tbody>
