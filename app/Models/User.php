@@ -77,4 +77,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Union::class, 'union_id');
     }
+
+    public function perDivision()
+    {
+        return $this->belongsTo(Division::class, 'per_division_id');
+    }
+    public function perDistrict()
+    {
+        return $this->belongsTo(District::class, 'per_district_id');
+    }
+    public function perUpazila()
+    {
+        return $this->belongsTo(Upazila::class, 'per_sub_district_id');
+    }
+    public function perUnion()
+    {
+        return $this->belongsTo(Union::class, 'per_union_id');
+    }
 }

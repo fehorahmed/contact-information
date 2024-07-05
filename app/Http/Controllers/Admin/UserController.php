@@ -194,6 +194,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->father_name = $request->father_name;
         $user->email = $request->email;
+        $user->phone = $request->phone;
         $user->password = Hash::make($request->password);
         $user->date_of_birth = $request->date_of_birth;
         $user->nid = $request->nid;
@@ -211,5 +212,56 @@ class UserController extends Controller
         $divisions = Division::all();
         $professions = Profession::all();
         return view('front.my_profile', compact('user', 'divisions', 'professions'));
+    }
+    public function userProfileUpdate(Request $request)
+    {
+
+        $request->validate([
+            "name" => 'required|string|max:255',
+            "father_name" => 'required|string|max:255',
+            "email" => 'required|string|email|max:255',
+            "phone" => 'required|numeric',
+            "date_of_birth" => 'required|date|max:255',
+            "nid" => 'required|string|max:255',
+            "permanent_division" => 'required|numeric',
+            "permanent_district" => 'required|numeric',
+            "permanent_upazila" => 'required|numeric',
+            "permanent_union" => 'required|numeric',
+            "permanent_ward" => 'required|numeric',
+            "permanent_address" => 'required|string|max:255',
+            "profession" => 'required|string|max:255',
+            "designation" => 'required|string|max:255',
+            "office_phone" => 'required|numeric',
+            "office_division" => 'required|numeric',
+            "office_district" => 'required|numeric',
+            "office_address" => 'required|string|max:255',
+        ]);
+        // dd($request->all());
+
+        $user = User::find(auth()->id());
+        $user->name = $request->name;
+        $user->father_name = $request->father_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->nid = $request->nid;
+        $user->per_division_id = $request->permanent_division;
+        $user->per_district_id = $request->permanent_district;
+        $user->per_sub_district_id = $request->permanent_upazila;
+        $user->per_union_id = $request->permanent_union;
+        $user->per_ward_no = $request->permanent_ward;
+        $user->per_address = $request->permanent_address;
+
+        $user->designation = $request->designation;
+        $user->profession_id = $request->profession;
+        $user->off_phone = $request->office_phone;
+        $user->off_division_id = $request->office_division;
+        $user->off_district_id = $request->office_district;
+        $user->off_address = $request->office_address;
+        if ($user->update()) {
+            return redirect()->back()->with('success', 'Your profile updated successfully.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Something went wrong.');
+        }
     }
 }

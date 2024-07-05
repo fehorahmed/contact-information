@@ -35,14 +35,17 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(
 ])->name('dashboard');
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/my_profile', [UserController::class, 'userProfile'])->name('user.profile');
+    Route::post('/my_profile', [UserController::class, 'userProfileUpdate']);
 });
+
+//Common
+Route::get('get-district', [\App\Http\Controllers\DistrictController::class, 'getDistrictByDivision'])->name('get.district');
+Route::get('get-sub-district', [\App\Http\Controllers\UpazilaController::class, 'getSubDistrictByDistrict'])->name('get.sub_district');
+Route::get('get-unions', [\App\Http\Controllers\UnionController::class, 'getUnionBySubDistrict'])->name('get.unions');
+
 
 Route::group(['middleware' => ['auth:web', 'admin.check'], 'prefix' => 'admin'], function () {
 
-    //Common
-    Route::get('get-district', [\App\Http\Controllers\DistrictController::class, 'getDistrictByDivision'])->name('get.district');
-    Route::get('get-sub-district', [\App\Http\Controllers\UpazilaController::class, 'getSubDistrictByDistrict'])->name('get.sub_district');
-    Route::get('get-unions', [\App\Http\Controllers\UnionController::class, 'getUnionBySubDistrict'])->name('get.unions');
 
 
     Route::group(['prefix' => 'registration'], function () {

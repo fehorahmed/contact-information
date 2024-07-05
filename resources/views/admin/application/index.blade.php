@@ -128,10 +128,10 @@
                                         <td>{{ $data->name }}</td>
                                         <td>{{ $data->email }}</td>
                                         <td>{{ $data->phone }}</td>
-                                        <td>{{ $data->district->name ?? '' }}</td>
-                                        <td>{{ $data->upazila->name ?? '' }}</td>
-                                        <td>{{ $data->union->name ?? '' }}</td>
-                                        <td>{{ $data->address ?? '' }}</td>
+                                        <td>{{ $data->perDistrict->name ?? '' }}</td>
+                                        <td>{{ $data->perUpazila->name ?? '' }}</td>
+                                        <td>{{ $data->perUnion->name ?? '' }}</td>
+                                        <td>{{ $data->per_address ?? '' }}</td>
                                         <td>{{ $data->registration_status ?? '' }}</td>
 
 

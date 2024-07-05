@@ -12,10 +12,30 @@
                         <h3>Your Profile</span></h3>
                         <p class="text-muted mt-2">Please fill out the following form and update your profile.
                         </p>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
-            <form>
+            <form action="" method="POST">
+                @csrf
                 <div class="row  mt-3">
                     <div class="col-md-4">
                         <div class="row mt-2">
@@ -90,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <div class="row mt-2">
                             <div class="col-lg-12">
                                 <h4>Present Address</h4>
@@ -197,7 +217,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4">
                         <div class="row mt-2">
                             <div class="col-lg-12">
@@ -210,7 +230,8 @@
                                         id="permanent_division">
                                         <option value="">Select One</option>
                                         @foreach ($divisions as $division)
-                                            <option {{ old('permanent_division', $user->per_divission_id) }}
+                                            <option
+                                                {{ old('permanent_division', $user->per_division_id) == $division->id ? 'selected' : '' }}
                                                 value="{{ $division->id }}">{{ $division->name }}</option>
                                         @endforeach
                                     </select>
@@ -253,7 +274,7 @@
                                         <option value="">Select One</option>
 
                                     </select>
-                                    @error('present_union')
+                                    @error('permanent_union')
                                         <div class="text-warning">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -264,29 +285,41 @@
                                     <select name="permanent_ward" class="form-select form-control-light"
                                         id="permanent_ward">
                                         <option value="">Select One</option>
-                                        <option {{ old('permanent_ward') == 1 ? 'selected' : '' }} value="1">1
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 1 ? 'selected' : '' }}
+                                            value="1">1
                                         </option>
-                                        <option {{ old('permanent_ward') == 2 ? 'selected' : '' }} value="2">2
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 2 ? 'selected' : '' }}
+                                            value="2">2
                                         </option>
-                                        <option {{ old('permanent_ward') == 3 ? 'selected' : '' }} value="3">3
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 3 ? 'selected' : '' }}
+                                            value="3">3
                                         </option>
-                                        <option {{ old('permanent_ward') == 4 ? 'selected' : '' }} value="4">4
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 4 ? 'selected' : '' }}
+                                            value="4">4
                                         </option>
-                                        <option {{ old('permanent_ward') == 5 ? 'selected' : '' }} value="5">5
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 5 ? 'selected' : '' }}
+                                            value="5">5
                                         </option>
-                                        <option {{ old('permanent_ward') == 6 ? 'selected' : '' }} value="6">6
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 6 ? 'selected' : '' }}
+                                            value="6">6
                                         </option>
-                                        <option {{ old('permanent_ward') == 7 ? 'selected' : '' }} value="7">7
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 7 ? 'selected' : '' }}
+                                            value="7">7
                                         </option>
-                                        <option {{ old('permanent_ward') == 8 ? 'selected' : '' }} value="8">8
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 8 ? 'selected' : '' }}
+                                            value="8">8
                                         </option>
-                                        <option {{ old('permanent_ward') == 9 ? 'selected' : '' }} value="9">9
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 9 ? 'selected' : '' }}
+                                            value="9">9
                                         </option>
-                                        <option {{ old('permanent_ward') == 10 ? 'selected' : '' }} value="10">10
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 10 ? 'selected' : '' }}
+                                            value="10">10
                                         </option>
-                                        <option {{ old('permanent_ward') == 11 ? 'selected' : '' }} value="11">11
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 11 ? 'selected' : '' }}
+                                            value="11">11
                                         </option>
-                                        <option {{ old('permanent_ward') == 12 ? 'selected' : '' }} value="12">12
+                                        <option {{ old('permanent_ward', $user->per_ward_no) == 12 ? 'selected' : '' }}
+                                            value="12">12
                                         </option>
 
                                     </select>
@@ -298,7 +331,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-2">
                                     <label for="permanent_address" class="form-label">Your Address</label>
-                                    <textarea class="form-control" name="permanent_address" id="permanent_address" cols="30" rows="2">{{ old('present_address') }}</textarea>
+                                    <textarea class="form-control" name="permanent_address" id="permanent_address" cols="30" rows="2">{{ old('permanent_address', $user->per_address) }}</textarea>
                                     @error('permanent_address')
                                         <div class="text-warning">{{ $message }}</div>
                                     @enderror
@@ -306,9 +339,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row align-items-center mt-3">
-
                     <div class="col-md-4">
                         <div class="row mt-2">
                             <div class="col-lg-12">
@@ -320,7 +350,8 @@
                                     <select name="profession" class="form-select form-control-light" id="profession">
                                         <option value="">Select One</option>
                                         @foreach ($professions as $profession)
-                                            <option {{ old('profession', $user->profession_id) }}
+                                            <option
+                                                {{ old('profession', $user->profession_id) == $profession->id ? 'selected' : '' }}
                                                 value="{{ $profession->id }}">{{ $profession->name }}</option>
                                         @endforeach
                                     </select>
@@ -351,11 +382,6 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mt-2">
-
                             <div class="col-lg-12">
                                 <div class="mb-2">
                                     <label for="office_division" class="form-label">Division</label>
@@ -363,7 +389,8 @@
                                         id="office_division">
                                         <option value="">Select One</option>
                                         @foreach ($divisions as $division)
-                                            <option {{ old('office_division', $user->off_division_id) }}
+                                            <option
+                                                {{ old('office_division', $user->off_division_id) == $division->id ? 'selected' : '' }}
                                                 value="{{ $division->id }}">{{ $division->name }}</option>
                                         @endforeach
                                     </select>
@@ -385,15 +412,11 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mt-2">
                             <div class="col-lg-12">
                                 <div class="mb-2">
-                                    <label for="permanent_address" class="form-label">Office Address</label>
-                                    <textarea class="form-control" name="permanent_address" id="permanent_address" cols="30" rows="5">{{ old('present_address') }}</textarea>
-                                    @error('permanent_address')
+                                    <label for="office_address" class="form-label">Office Address</label>
+                                    <textarea class="form-control" name="office_address" id="office_address" cols="30" rows="2">{{ old('office_address', $user->off_address) }}</textarea>
+                                    @error('office_address')
                                         <div class="text-warning">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -417,3 +440,134 @@
     </section>
     <!-- END CONTACT -->
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+
+            var permanentDistrictSelected = '{{ old('permanent_district', $user->per_district_id) }}'
+            $('#permanent_division').on('change', function() {
+                var division_id = $(this).val();
+                $('#permanent_district').html('<option value="">Select district</option>');
+
+                $.ajax({
+                    method: "GET",
+                    url: '{{ route('get.district') }}',
+                    data: {
+                        division_id: division_id
+                    }
+                }).done(function(data) {
+                    $.each(data, function(index, item) {
+                        if (permanentDistrictSelected == item.id) {
+                            $('#permanent_district').append('<option selected value="' +
+                                item.id +
+                                '" selected>' + item.name + '</option>');
+                        } else {
+                            $('#permanent_district').append('<option value="' + item.id +
+                                '">' + item
+                                .name + '</option>');
+                        }
+                    });
+
+                    $('#permanent_district').trigger('change');
+                });
+
+            });
+
+            // personal address
+            $('#permanent_division').trigger('change');
+            var permanentSubDistrictSelected = '{{ old('permanent_upazila', $user->per_sub_district_id) }}';
+            $('#permanent_district').on('change', function() {
+                var district_id = $(this).val();
+                $('#permanent_upazila').html('<option value="">Select upazila</option>');
+                if (district_id != '' && district_id != null) {
+                    $.ajax({
+                        method: "GET",
+                        url: '{{ route('get.sub_district') }}',
+                        data: {
+                            district_id: district_id
+                        }
+                    }).done(function(data) {
+                        $.each(data, function(index, item) {
+                            if (permanentSubDistrictSelected == item.id) {
+                                $('#permanent_upazila').append('<option selected value="' +
+                                    item
+                                    .id +
+                                    '" selected>' + item.name + '</option>');
+                            } else {
+                                $('#permanent_upazila').append('<option value="' + item.id +
+                                    '">' +
+                                    item.name + '</option>');
+                            }
+                        });
+                        $('#permanent_upazila').trigger('change');
+                    });
+                }
+            });
+            $('#permanent_district').trigger('change');
+
+
+            var permanentUnionSelected = '{{ old('permanent_union', $user->per_union_id) }}';
+            $('#permanent_upazila').on('change', function() {
+                var upazila_id = $(this).val();
+                $('#permanent_union').html('<option value="">Select union/ward</option>');
+                if (upazila_id != '' && upazila_id != null) {
+                    $.ajax({
+                        method: "GET",
+                        url: '{{ route('get.unions') }}',
+                        data: {
+                            sub_district_id: upazila_id
+                        }
+                    }).done(function(data) {
+                        $.each(data, function(index, item) {
+                            if (permanentUnionSelected == item.id) {
+                                $('#permanent_union').append('<option selected value="' +
+                                    item
+                                    .id +
+                                    '" selected>' + item.name + '</option>');
+                            } else {
+                                $('#permanent_union').append('<option value="' + item.id +
+                                    '">' +
+                                    item.name + '</option>');
+                            }
+                        });
+                        $('#permanent_union').trigger('change');
+                    });
+                }
+            });
+            $('#permanent_upazila').trigger('change');
+
+
+            //For Office
+
+
+            var officeDistrictSelected = '{{ old('office_district', $user->off_district_id) }}'
+            $('#office_division').on('change', function() {
+                var division_id = $(this).val();
+                $('#office_district').html('<option value="">Select district</option>');
+
+                $.ajax({
+                    method: "GET",
+                    url: '{{ route('get.district') }}',
+                    data: {
+                        division_id: division_id
+                    }
+                }).done(function(data) {
+                    $.each(data, function(index, item) {
+                        if (officeDistrictSelected == item.id) {
+                            $('#office_district').append('<option selected value="' +
+                                item.id +
+                                '" selected>' + item.name + '</option>');
+                        } else {
+                            $('#office_district').append('<option value="' + item.id +
+                                '">' + item
+                                .name + '</option>');
+                        }
+                    });
+                });
+            });
+            $('#office_division').trigger('change');
+
+        });
+    </script>
+@endpush

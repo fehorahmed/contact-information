@@ -19,7 +19,7 @@ class UnionController extends Controller
 
     public function getUnionBySubDistrict(Request $request)
     {
-        $unions= Union::where('upazilla_id',$request->sub_district_id)->get()->toArray();
+        $unions = Union::where('upazilla_id', $request->sub_district_id)->get()->toArray();
         return response($unions);
     }
 
