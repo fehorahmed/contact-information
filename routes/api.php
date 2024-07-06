@@ -16,13 +16,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('admin/login', [UserController::class, 'apiAdminLogin']);
+
 Route::post('user/login', [UserController::class, 'apiUserLogin']);
+Route::post('user/registration', [UserController::class, 'apiUserRegistration']);
 
 Route::middleware('auth:sanctum', 'ability:admin', 'throttle:1000,1')->group(function () {
-    Route::post('user/login', [UserController::class, 'apiUserLogin']);
+});
+Route::middleware('auth:sanctum', 'ability:user', 'throttle:1000,1')->group(function () {
 });
 
 
 Route::middleware('auth:sanctum', 'throttle:1000,1')->group(function () {
     Route::get('/user', [UserController::class, 'apiUserInfo']);
+
+    Route::prefix('common')->group(function () {
+        // Route::get('/{market}/index', [ShopController::class, 'apiIndex']);
+    });
 });

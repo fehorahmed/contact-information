@@ -242,7 +242,7 @@ class UserController extends Controller
             "date_of_birth" => 'required|date',
             "nid" => 'required|string|max:255',
         ]);
-        // dd($request->all());
+        //dd($request->all());
         $user = new User();
         $user->name = $request->name;
         $user->father_name = $request->father_name;
@@ -251,6 +251,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->date_of_birth = $request->date_of_birth;
         $user->nid = $request->nid;
+        $user->role = 1;
         $user->registration_status = 'Applied';
         if ($user->save()) {
             return redirect()->route('login')->with('success', 'Registration Successfull. Please Login');
@@ -386,9 +387,86 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function apiUserRegistration(Request $request)
+    {
+        $rules = [
+            "name" => 'required|string|max:255',
+            "father_name" => 'required|string|max:255',
+            "email" => 'required|email|unique:users,email',
+            "phone" => 'required|numeric|unique:users,phone',
+            "password" => 'required|string|min:8|confirmed',
+            "date_of_birth" => 'required|date',
+            "nid" => 'required|string|max:255',
+        ];
+
+        $validation = Validator::make($request->all(), $rules);
+
+        if ($validation->fails()) {
+            return response([
+                'status' => false,
+                'message' => $validation->messages()->first(),
+            ]);
+        }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->father_name = $request->father_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->password = Hash::make($request->password);
+        $user->date_of_birth = $request->date_of_birth;
+        $user->nid = $request->nid;
+        $user->role = 1;
+        $user->registration_status = 'Applied';
+        if ($user->save()) {
+            return response([
+                'status' => true,
+                'message' => 'Registration success.',
+            ]);
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'Something went wrong.',
+            ]);
+        }
+    }
+
+
     public function apiUserLogin(Request $request)
     {
-        dd('user');
+        $rules = [
+            'email' => 'required',
+            'password' => 'required'
+        ];
+
+        $validation = Validator::make($request->all(), $rules);
+
+        if ($validation->fails()) {
+            return response([
+                'status' => false,
+                'message' => $validation->messages()->first(),
+            ]);
+        }
+
+
+        if (
+            !Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 1])
+            && !Auth::attempt(['phone' => $request->email, 'password' => $request->password, 'role' => 1])
+        ) {
+
+            return response([
+                'status' => false,
+                'message' => "Email or password dose not match.",
+            ]);
+        } else {
+            $token = $request->user()->createToken('admin-access-token', ['user'])->plainTextToken;
+            return response()->json([
+                'status' => true,
+                'user' => new UserResource($request->user()),
+                'token' => $token
+            ]);
+        }
     }
     public function apiUserInfo(Request $request)
     {
