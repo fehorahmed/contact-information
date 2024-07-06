@@ -67,10 +67,34 @@ class UserController extends Controller
         $divisions = Division::all();
         return view('admin.application.index', compact('datas', 'divisions'));
     }
-    public function approvedUser()
+    public function approvedUser(Request $request)
     {
 
-        $datas = User::where(['registration_status' => 'Approved', 'role' => 1])->paginate();
+        $request->validate([
+            'division' => 'nullable|numeric',
+            'district' => 'nullable|numeric',
+            'upazila' => 'nullable|numeric',
+            'union' => 'nullable|numeric',
+        ]);
+
+
+        $query = User::where(['registration_status' => 'Approved', 'role' => 1]);
+
+        if ($request->division) {
+            $query->where('per_division_id', $request->division);
+        }
+        if ($request->district) {
+            $query->where('per_district_id', $request->district);
+        }
+        if ($request->upazila) {
+            $query->where('per_sub_district_id', $request->upazila);
+        }
+        if ($request->union) {
+            $query->where('per_union_id', $request->union);
+        }
+
+        $datas = $query->paginate();
+
         $divisions = Division::all();
         return view('admin.application.index', compact('datas', 'divisions'));
     }
