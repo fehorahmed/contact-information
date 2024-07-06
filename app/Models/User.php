@@ -94,4 +94,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Union::class, 'per_union_id');
     }
+    public function officeDivision()
+    {
+        return $this->belongsTo(Division::class, 'off_division_id');
+    }
+    public function officeDistrict()
+    {
+        return $this->belongsTo(District::class, 'off_district_id');
+    }
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class, 'profession_id');
+    }
 }

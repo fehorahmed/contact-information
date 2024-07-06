@@ -46,15 +46,14 @@ Route::get('get-unions', [\App\Http\Controllers\UnionController::class, 'getUnio
 
 Route::group(['middleware' => ['auth:web', 'admin.check'], 'prefix' => 'admin'], function () {
 
-
-
     Route::group(['prefix' => 'registration'], function () {
         Route::get('/', [UserController::class, 'registration'])->name('admin.registration.index');
+        Route::post('/', [UserController::class, 'registrationUserStatusChange'])->name('admin.registration.status-change');
         // Route::get('/create', [SettingController::class, 'create'])->name('admin.complain.create');
         // Route::post('/create', [SettingController::class, 'store'])->name('admin.complain.store');
         // Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('admin.complain.edit');
         // Route::post('/edit/{id}', [SettingController::class, 'update'])->name('admin.complain.update');
-        // Route::get('/{id}/view', [SettingController::class, 'view'])->name('admin.complain.view');
+        Route::get('/{id}/view', [UserController::class, 'userView'])->name('admin.registration.view');
         // Route::get('/export', [SettingController::class, 'export'])->name('admin.complain.export');
         // Route::post('/note-store', [SettingController::class, 'noteStore'])->name('admin.complain.note-store');
     });

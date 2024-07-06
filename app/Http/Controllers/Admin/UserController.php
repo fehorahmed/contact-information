@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\Division;
 use App\Models\Profession;
 use App\Models\User;
@@ -37,10 +38,32 @@ class UserController extends Controller
         $datas = User::where('role', '!=', 1)->get();
         return view('admin.user.index', compact('datas'));
     }
-    public function registration()
+    public function registration(Request $request)
     {
 
-        $datas = User::where(['registration_status' => 'Applied', 'role' => 1])->paginate();
+        $request->validate([
+            'division' => 'nullable|numeric',
+            'district' => 'nullable|numeric',
+            'upazila' => 'nullable|numeric',
+            'union' => 'nullable|numeric',
+        ]);
+        $query = User::where(['registration_status' => 'Applied', 'role' => 1]);
+
+        if ($request->division) {
+            $query->where('per_division_id', $request->division);
+        }
+        if ($request->district) {
+            $query->where('per_district_id', $request->district);
+        }
+        if ($request->upazila) {
+            $query->where('per_sub_district_id', $request->upazila);
+        }
+        if ($request->union) {
+            $query->where('per_union_id', $request->union);
+        }
+
+
+        $datas = $query->paginate();
         $divisions = Division::all();
         return view('admin.application.index', compact('datas', 'divisions'));
     }
@@ -50,6 +73,12 @@ class UserController extends Controller
         $datas = User::where(['registration_status' => 'Approved', 'role' => 1])->paginate();
         $divisions = Division::all();
         return view('admin.application.index', compact('datas', 'divisions'));
+    }
+    public function userView($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('admin.application.view', compact('user'));
     }
 
     /**
@@ -213,6 +242,23 @@ class UserController extends Controller
         $professions = Profession::all();
         return view('front.my_profile', compact('user', 'divisions', 'professions'));
     }
+    public function registrationUserStatusChange(Request $request)
+    {
+
+        $request->validate([
+            'user_id' => 'required|numeric',
+            'status' => 'string|max:255'
+        ]);
+
+
+        $user = User::findOrFail($request->user_id);
+        $user->registration_status = $request->status;
+        if ($user->update()) {
+            return redirect()->back()->with('success', 'Status change successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong.');
+        }
+    }
     public function userProfileUpdate(Request $request)
     {
 
@@ -235,6 +281,8 @@ class UserController extends Controller
             "office_division" => 'required|numeric',
             "office_district" => 'required|numeric',
             "office_address" => 'required|string|max:255',
+            "image" => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+
         ]);
         // dd($request->all());
 
@@ -258,10 +306,68 @@ class UserController extends Controller
         $user->off_division_id = $request->office_division;
         $user->off_district_id = $request->office_district;
         $user->off_address = $request->office_address;
+
+        if ($request->hasFile('image')) {
+            $dest = 'profile_photo';
+            $path = saveImage($dest, $request->image, 200, 200);
+            $user->profile_photo_path = $path;
+        }
+
+
         if ($user->update()) {
             return redirect()->back()->with('success', 'Your profile updated successfully.');
         } else {
             return redirect()->back()->withInput()->with('error', 'Something went wrong.');
         }
+    }
+
+    public function apiAdminLogin(Request $request)
+    {
+
+        $rules = [
+            'email' => 'required',
+            'password' => 'required'
+        ];
+
+        $validation = Validator::make($request->all(), $rules);
+
+        if ($validation->fails()) {
+            return response([
+                'status' => false,
+                'message' => $validation->messages()->first(),
+            ]);
+        }
+        // if (Auth::attempt($credentials)) {
+        //     $token = $request->user()->createToken('user-access-token')->plainTextToken;
+        //     return response()->json(['token' => $token]);
+        // } else {
+        //     return response()->json(['message' => 'Unauthorized'], 401);
+        // }
+
+        if (
+            !Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 2])
+            && !Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 3])
+        ) {
+
+            return response([
+                'status' => false,
+                'message' => "Email or password dose not match.",
+            ]);
+        } else {
+            $token = $request->user()->createToken('admin-access-token', ['admin'])->plainTextToken;
+            return response()->json([
+                'status' => true,
+                'user' => new UserResource($request->user()),
+                'token' => $token
+            ]);
+        }
+    }
+    public function apiUserLogin(Request $request)
+    {
+        dd('user');
+    }
+    public function apiUserInfo(Request $request)
+    {
+        return new UserResource($request->user());
     }
 }

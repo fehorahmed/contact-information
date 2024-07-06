@@ -45,7 +45,7 @@
 
                                 <div class="col-md-2">
                                     <div class="mb-3">
-                                        <label for="example-select" class="form-label">Division</label>
+                                        <label for="division" class="form-label">Division</label>
                                         <select name="division" class="form-select" id="division">
                                             <option value="">Select One</option>
                                             @foreach ($divisions as $division)
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="mb-3">
-                                        <label for="example-select" class="form-label">District</label>
+                                        <label for="district" class="form-label">District</label>
                                         <select name="district" class="form-select" id="district">
                                             <option value="">Select One</option>
                                         </select>
@@ -65,32 +65,21 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="mb-3">
-                                        <label for="example-select" class="form-label">Upazila</label>
+                                        <label for="sub_district" class="form-label">Upazila</label>
                                         <select name="upazila" class="form-select" id="sub_district">
                                             <option value="">Select One</option>
                                         </select>
                                     </div>
                                 </div>
-                                {{--                                    <div class="col-md-2"> --}}
-                                {{--                                        <div class="mb-3"> --}}
-                                {{--                                            <label class="form-label">Date Range</label> --}}
-                                {{--                                            <input type="text" name="date" class="form-control date" --}}
-                                {{--                                                   id="singledaterange" data-toggle="date-picker" --}}
-                                {{--                                                   data-cancel-class="btn-warning"> --}}
-                                {{--                                        </div> --}}
-                                {{--                                    </div> --}}
                                 <div class="col-md-2">
                                     <div class="mb-3">
-                                        <label class="form-label">Start Date</label>
-                                        <input type="date" name="start_date" class="form-control">
+                                        <label for="union" class="form-label">Union</label>
+                                        <select name="union" class="form-select" id="union">
+                                            <option value="">Select One</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="mb-3">
-                                        <label class="form-label">Start Date</label>
-                                        <input type="date" name="end_date" class="form-control">
-                                    </div>
-                                </div>
+
                                 <div class="col-md-2">
                                     <div class="mb-3">
                                         <button type="submit" name="submit" value="search"
@@ -134,8 +123,14 @@
                                         <td>{{ $data->per_address ?? '' }}</td>
                                         <td>{{ $data->registration_status ?? '' }}</td>
                                         <td>
+                                            <a class="btn btn-info btn-sm"
+                                                href="{{ route('admin.registration.view', $data->id) }}">View</a>
+                                            @if (!request()->routeIs('admin.approved.index'))
+                                                <button class="btn btn-primary btn-sm  status-btn" data-bs-toggle="modal"
+                                                    data-id="{{ $data->id }}" data-bs-target="#staticBackdrop">Change
+                                                    Status</button>
+                                            @endif
 
-                                            <button class="btn btn-primary btn-sm mt-1 status-btn">Change Status</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -148,9 +143,7 @@
 
         </div>
         <!-- end row -->
-
     </div>
-
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -161,19 +154,18 @@
                     <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="POST">
+                <form action="{{ route('admin.registration.status-change') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" name="complain_id" id="complain_id">
+                        <input type="hidden" name="user_id" id="user_id">
                         <label for="">Select Status</label>
                         <select name="status" id="" class="form-select">
                             <option value="">select one</option>
-                            <option value="1">Pending</option>
-                            <option value="2">Completed</option>
-                            <option value="3">Canceled</option>
+                            <option value="Approved">Approved</option>
+
                         </select>
-                        <label for="" class="mt-1">Note</label>
-                        <textarea name="note" id="" cols="30" rows="3" class="form-control"></textarea>
+                        {{-- <label for="" class="mt-1">Note</label>
+                        <textarea name="note" id="" cols="30" rows="3" class="form-control"></textarea> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -188,8 +180,9 @@
     <script>
         $(function() {
             $('.status-btn').on('click', function() {
-                var complain_id = $(this).attr('data-complain-id');
-                $('#complain_id').val(complain_id);
+                var user_id = $(this).attr('data-id');
+
+                $('#user_id').val(user_id);
             });
         });
 
@@ -217,9 +210,9 @@
                                 .name + '</option>');
                         }
                     });
-
                     $('#district').trigger('change');
                 });
+
 
             });
 
@@ -229,30 +222,32 @@
             $('#district').on('change', function() {
                 var district_id = $(this).val();
                 $('#sub_district').html('<option value="">Select sub district</option>');
-                if (district_id != '' && district_id != null) {
-                    $.ajax({
-                        method: "GET",
-                        url: '{{ route('get.sub_district') }}',
-                        data: {
-                            district_id: district_id
+                // if (district_id != '' && district_id != null) {
+                $.ajax({
+                    method: "GET",
+                    url: '{{ route('get.sub_district') }}',
+                    data: {
+                        district_id: district_id
+                    }
+                }).done(function(data) {
+                    $.each(data, function(index, item) {
+                        if (subDistrictSelected == item.id) {
+                            $('#sub_district').append('<option selected value="' + item
+                                .id +
+                                '" selected>' + item.name + '</option>');
+                        } else {
+                            $('#sub_district').append('<option value="' + item.id +
+                                '">' +
+                                item.name + '</option>');
                         }
-                    }).done(function(data) {
-                        $.each(data, function(index, item) {
-                            if (subDistrictSelected == item.id) {
-                                $('#sub_district').append('<option selected value="' + item
-                                    .id +
-                                    '" selected>' + item.name + '</option>');
-                            } else {
-                                $('#sub_district').append('<option value="' + item.id +
-                                    '">' +
-                                    item.name + '</option>');
-                            }
-                        });
                     });
-                }
+                    $('#sub_district').trigger('change');
+                });
+                // }
+
             });
             $('#district').trigger('change');
-            var unionSelected = '{{ old('union') }}';
+            var unionSelected = '{{ request('union') }}';
             $('#sub_district').on('change', function() {
                 var sub_district_id = $(this).val();
                 $('#union').html('<option value="">Select union</option>');
@@ -279,7 +274,6 @@
                 }
             });
             $('#sub_district').trigger('change');
-            $('#division_area').hide()
         });
     </script>
 @endpush

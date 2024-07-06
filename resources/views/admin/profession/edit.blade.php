@@ -1,6 +1,6 @@
 @extends('admin.app')
 @section('title')
-    {{ isset($pageTitle) ? $pageTitle : 'Complain User' }}
+    {{ isset($pageTitle) ? $pageTitle : 'Profession Create' }}
 @endsection
 @section('content')
     @include('admin.master.flash')
@@ -10,11 +10,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Profession</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Create</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">User Create</h4>
+                    <h4 class="page-title">Profession Update</h4>
                 </div>
             </div>
         </div>
@@ -22,107 +22,52 @@
             <div class="col-md-8 m-auto">
                 <div class="card">
                     <div class="card-header bg-info ">
-                        <h4 class=" text-white content-center">User Create</h4>
+                        <h4 class=" text-white content-center">Profession Update</h4>
                     </div>
                     <div class="card-body">
                         <form id="campaign-form" class="form-horizontal" method="post"
-                              action="{{route('admin.user.store')}}"
-                              enctype="multipart/form-data">
+                            action="{{ route('admin.config.profession.update', $profession->id) }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="row mb-3">
                                 <label for="name" class="col-12 col-md-3 col-form-label">Name</label>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" name="name" id="name" value="{{old('name')}}"
-                                           class="form-control" placeholder="User name">
+                                    <input type="text" name="name" id="name"
+                                        value="{{ old('name', $profession->name) }}" class="form-control"
+                                        placeholder="User name">
                                     @error('name')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
 
                             </div>
 
                             <div class="row mb-3">
-                                <label for="email" class="col-12 col-md-3 col-form-label">Email</label>
+                                <label for="name" class="col-12 col-md-3 col-form-label">Status</label> <br>
                                 <div class="col-12 col-md-9">
-                                    <input type="email" name="email" value="{{old('email')}}"
-                                           id="email" class="form-control" placeholder="User email">
-                                    @error('email')
-                                    <div class="help-block text-danger">{{ $message }} </div>
-                                    @enderror
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                <label for="example-select" class="col-12 col-md-3 col-form-label">Password</label>
-                                <div class="col-12 col-md-9">
-                                    <input type="password" name="password" value="" id="password"
-                                           class="form-control" placeholder="User password">
-                                    @error('password')
-                                    <div class="help-block text-danger">{{ $message }} </div>
-                                    @enderror
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                <label for="password_confirmation" class="col-12 col-md-3 col-form-label">Confirm
-                                    Password</label>
-                                <div class="col-12 col-md-9">
-                                    <input type="password" name="password_confirmation" value=""
-                                           id="password_confirmation"
-                                           class="form-control" placeholder="Confirm password">
-                                    @error('password_confirmation')
-                                    <div class="help-block text-danger">{{ $message }} </div>
-                                    @enderror
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                <label for="example-select" class="col-12 col-md-3 col-form-label">User Phone</label>
-                                <div class="col-12 col-md-9">
-                                    <input type="number" name="phone" id="phone" value="{{old('phone')}}"
-                                           class="form-control" placeholder="User phone number">
-                                    @error('phone')
-                                    <div class="help-block text-danger">{{ $message }} </div>
-                                    @enderror
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                <label for="role" class="col-12 col-md-3 col-form-label">User Role</label>
-                                <div class="col-12 col-md-9">
-                                    <select name="role" id="role" class="form-select">
-                                        <option value="">Select One</option>
-                                        <option {{old('role')==1?'selected':''}} value="1">Union User</option>
-                                        <option {{old('role')==2?'selected':''}} value="2">Sub District Admin</option>
-                                        <option {{old('role')==3?'selected':''}} value="3">District Admin</option>
-                                        <option {{old('role')==4?'selected':''}} value="4">Division Admin</option>
-                                        <option {{old('role')==5?'selected':''}} value="5">Country Admin</option>
-                                    </select>
-                                    @error('role')
-                                    <div class="help-block text-danger">{{ $message }} </div>
+                                    <label for="status1">Active</label>
+                                    <input type="radio" id="status1" name="status"
+                                        {{ old('status', $profession->status) == 1 ? 'checked' : '' }} value="1">
+                                    <label for="status2">Inactive</label> <input id="status2" type="radio"
+                                        {{ old('status', $profession->status) == '0' ? 'checked' : '' }} name="status"
+                                        value="0">
+                                    @error('status')
+                                        <div class="help-block text-danger">{{ $message }} </div>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="text-center mb-3">
-                                <a href="{{route('admin.user.index')}}" class="btn btn-danger">Back</a>
-                                <input type="submit" class="btn btn-primary  " value="Update User">
+                                <a href="{{ route('admin.config.profession.index') }}" class="btn btn-danger">Back</a>
+                                <input type="submit" class="btn btn-primary  " value="Update Profession">
                             </div>
                         </form>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
 @endsection
 @push('scripts')
-
-    <script>
-        $(function () {
-
-        });
-    </script>
-
+    <script></script>
 @endpush

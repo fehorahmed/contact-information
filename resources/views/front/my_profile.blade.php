@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row  mt-3">
                     <div class="col-md-4">
@@ -103,6 +103,19 @@
                                     @error('nid')
                                         <div class="text-warning">{{ $message }}</div>
                                     @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-2">
+                                    <label for="image" class="form-label">Your Photo</label>
+                                    <input class="form-control form-control-light" type="file" name="image"
+                                        id="image" placeholder="Enter you nid...">
+                                    @error('image')
+                                        <div class="text-warning">{{ $message }}</div>
+                                    @enderror
+                                    @if ($user->profile_photo_path)
+                                        <img src="{{ asset($user->profile_photo_path) }}" class="mt-1" alt="Photo">
+                                    @endif
                                 </div>
                             </div>
 

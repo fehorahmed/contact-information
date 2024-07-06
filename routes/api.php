@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('admin/login', [UserController::class, 'apiAdminLogin']);
+Route::post('user/login', [UserController::class, 'apiUserLogin']);
+
+Route::middleware('auth:sanctum', 'ability:admin', 'throttle:1000,1')->group(function () {
+    Route::post('user/login', [UserController::class, 'apiUserLogin']);
+});
+
+
+Route::middleware('auth:sanctum', 'throttle:1000,1')->group(function () {
+    Route::get('/user', [UserController::class, 'apiUserInfo']);
 });

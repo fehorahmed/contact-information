@@ -70,9 +70,9 @@ class ProfessionController extends Controller
      * @param  \App\Models\Profession  $profession
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profession $profession)
+    public function edit($id)
     {
-
+        $profession = Profession::findOrFail($id);
         return view('admin.profession.edit', compact('profession'));
     }
 
@@ -83,9 +83,21 @@ class ProfessionController extends Controller
      * @param  \App\Models\Profession  $profession
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profession $profession)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:professions,name,' . $id,
+            'status' => 'required|boolean',
+        ]);
+        // dd($request->all());
+        $profession =  Profession::findOrFail($id);
+        $profession->name = $request->name;
+        $profession->status = $request->status;
+        if ($profession->save()) {
+            return redirect()->route('admin.config.profession.index')->with('success', 'Profession updated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong.');
+        }
     }
 
     /**
