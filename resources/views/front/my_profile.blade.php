@@ -84,11 +84,12 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <div class="mb-2">
+                                <div class="mb-2 position-relative" id="datepicker2">
                                     <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                    <input class="form-control form-control-light" type="date" required=""
-                                        name="date_of_birth" id="date_of_birth" placeholder="Enter you phone..."
-                                        value="{{ old('date_of_birth', $user->date_of_birth) }}">
+                                    <input class="form-control form-control-light datepicker" type="text" required=""
+                                        name="date_of_birth" data-provide="datepicker" data-date-format="dd-mm-yyyy"
+                                        data-date-container="#datepicker2"
+                                        value="{{ old('date_of_birth', \Carbon\Carbon::parse($user->date_of_birth)->format('d-m-Y')) }}">
                                     @error('date_of_birth')
                                         <div class="text-warning">{{ $message }}</div>
                                     @enderror

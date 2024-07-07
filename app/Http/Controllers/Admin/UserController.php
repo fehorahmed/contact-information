@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Division;
 use App\Models\Profession;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -249,7 +250,10 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->password = Hash::make($request->password);
-        $user->date_of_birth = $request->date_of_birth;
+        // $user->date_of_birth = $request->date_of_birth;
+        if ($request->date_of_birth) {
+            $user->date_of_birth =  Carbon::createFromFormat('d-m-Y', $request->date_of_birth)->format('Y-m-d');
+        }
         $user->nid = $request->nid;
         $user->role = 1;
         $user->registration_status = 'Applied';
@@ -316,7 +320,11 @@ class UserController extends Controller
         $user->father_name = $request->father_name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->date_of_birth = $request->date_of_birth;
+
+        if ($request->date_of_birth) {
+            $user->date_of_birth =  Carbon::createFromFormat('d-m-Y', $request->date_of_birth)->format('Y-m-d');
+        }
+        // $user->date_of_birth = $request->date_of_birth;
         $user->nid = $request->nid;
         $user->per_division_id = $request->permanent_division;
         $user->per_district_id = $request->permanent_district;
