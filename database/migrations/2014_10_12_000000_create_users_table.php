@@ -51,7 +51,7 @@ return new class extends Migration
             $table->tinyInteger('role')->default(1)->comment('1=user, 2=Admin, 3= Super Admin');
             $table->foreignId('created_by')->nullable();
             $table->boolean('status')->default(1);
-            $table->enum('registration_status', ['Applied', 'Approved'])->nullable();
+            $table->enum('registration_status', ['Pending', 'Approved', 'Cancel'])->nullable();
             $table->timestamps();
         });
         \Illuminate\Support\Facades\DB::table('users')->insert([
