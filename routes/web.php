@@ -49,16 +49,13 @@ Route::group(['middleware' => ['auth:web', 'admin.check'], 'prefix' => 'admin'],
     Route::group(['prefix' => 'registration'], function () {
         Route::get('/', [UserController::class, 'registration'])->name('admin.registration.index');
         Route::post('/', [UserController::class, 'registrationUserStatusChange'])->name('admin.registration.status-change');
-        // Route::get('/create', [SettingController::class, 'create'])->name('admin.complain.create');
-        // Route::post('/create', [SettingController::class, 'store'])->name('admin.complain.store');
-        // Route::get('/edit/{id}', [SettingController::class, 'edit'])->name('admin.complain.edit');
-        // Route::post('/edit/{id}', [SettingController::class, 'update'])->name('admin.complain.update');
         Route::get('/{id}/view', [UserController::class, 'userView'])->name('admin.registration.view');
-        // Route::get('/export', [SettingController::class, 'export'])->name('admin.complain.export');
-        // Route::post('/note-store', [SettingController::class, 'noteStore'])->name('admin.complain.note-store');
     });
     Route::group(['prefix' => 'approved'], function () {
         Route::get('/', [UserController::class, 'approvedUser'])->name('admin.approved.index');
+    });
+    Route::group(['prefix' => 'cancel'], function () {
+        Route::get('/', [UserController::class, 'cancelledUser'])->name('admin.cancel.index');
     });
     Route::group(['prefix' => 'configure'], function () {
 

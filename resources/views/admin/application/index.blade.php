@@ -162,6 +162,7 @@
                         <select name="status" id="" class="form-select">
                             <option value="">select one</option>
                             <option value="Approved">Approved</option>
+                            <option value="Cancel">Cancel</option>
 
                         </select>
                         {{-- <label for="" class="mt-1">Note</label>

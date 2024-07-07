@@ -48,7 +48,7 @@ class UserController extends Controller
             'upazila' => 'nullable|numeric',
             'union' => 'nullable|numeric',
         ]);
-        $query = User::where(['registration_status' => 'Applied', 'role' => 1]);
+        $query = User::where(['registration_status' => 'Pending', 'role' => 1]);
 
         if ($request->division) {
             $query->where('per_division_id', $request->division);
@@ -80,6 +80,37 @@ class UserController extends Controller
 
 
         $query = User::where(['registration_status' => 'Approved', 'role' => 1]);
+
+        if ($request->division) {
+            $query->where('per_division_id', $request->division);
+        }
+        if ($request->district) {
+            $query->where('per_district_id', $request->district);
+        }
+        if ($request->upazila) {
+            $query->where('per_sub_district_id', $request->upazila);
+        }
+        if ($request->union) {
+            $query->where('per_union_id', $request->union);
+        }
+
+        $datas = $query->paginate();
+
+        $divisions = Division::all();
+        return view('admin.application.index', compact('datas', 'divisions'));
+    }
+    public function cancelledUser(Request $request)
+    {
+
+        $request->validate([
+            'division' => 'nullable|numeric',
+            'district' => 'nullable|numeric',
+            'upazila' => 'nullable|numeric',
+            'union' => 'nullable|numeric',
+        ]);
+
+
+        $query = User::where(['registration_status' => 'Cancel', 'role' => 1]);
 
         if ($request->division) {
             $query->where('per_division_id', $request->division);
@@ -256,7 +287,7 @@ class UserController extends Controller
         }
         $user->nid = $request->nid;
         $user->role = 1;
-        $user->registration_status = 'Applied';
+        $user->registration_status = 'Pending';
         if ($user->save()) {
             return redirect()->route('login')->with('success', 'Registration Successfull. Please Login');
         } else {
@@ -426,7 +457,7 @@ class UserController extends Controller
         $user->date_of_birth = $request->date_of_birth;
         $user->nid = $request->nid;
         $user->role = 1;
-        $user->registration_status = 'Applied';
+        $user->registration_status = 'Pending';
         if ($user->save()) {
             return response([
                 'status' => true,
