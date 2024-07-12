@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ProfessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,13 @@ Route::post('user/login', [UserController::class, 'apiUserLogin']);
 Route::post('user/registration', [UserController::class, 'apiUserRegistration']);
 
 Route::middleware('auth:sanctum', 'ability:admin', 'throttle:1000,1')->group(function () {
+
+    Route::group(['prefix' => 'profession'], function () {
+        Route::get('/list', [ProfessionController::class, 'apiIndex']);
+        Route::post('/create', [ProfessionController::class, 'apiCreate']);
+        Route::get('/edit/{id}', [ProfessionController::class, 'apiEdit']);
+        Route::post('/edit/{id}', [ProfessionController::class, 'apiUpdate']);
+    });
 });
 Route::middleware('auth:sanctum', 'ability:user', 'throttle:1000,1')->group(function () {
 });
