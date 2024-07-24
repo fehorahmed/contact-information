@@ -20,7 +20,7 @@
     @if ($setting && $setting->logo)
         <link rel="shortcut icon" href="{{ asset($setting->logo ?? '') }}">
     @else
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        {{-- <link rel="shortcut icon" href="assets/images/favicon.ico"> --}}
     @endif
     <!-- App css -->
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css">
