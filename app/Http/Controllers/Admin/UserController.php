@@ -511,4 +511,9 @@ class UserController extends Controller
     {
         return new UserResource($request->user());
     }
+    public function apiUserProfileUpdate(Request $request)
+    {
+        dd('Working');
+        return new UserResource($request->user());
+    }
 }

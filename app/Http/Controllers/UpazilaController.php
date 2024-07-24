@@ -17,11 +17,17 @@ class UpazilaController extends Controller
         //
     }
 
-    public function getSubDistrictByDistrict(Request $request){
-        $subDistricts= Upazila::where('district_id',$request->district_id)->get()->toArray();
+    public function getSubDistrictByDistrict(Request $request)
+    {
+        $subDistricts = Upazila::where('district_id', $request->district_id)->get()->toArray();
 
         return response($subDistricts);
+    }
+    public function apiGetSubDistrict(Request $request)
+    {
+        $subDistricts = Upazila::where('district_id', $request->district_id)->get();
 
+        return response($subDistricts);
     }
 
     /**

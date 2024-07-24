@@ -38,4 +38,11 @@ class HomeController extends Controller
 
         return view('front.home', compact('contacts', 'divisions'));
     }
+
+
+    public function getDivision()
+    {
+        $datas = Division::all();
+        return response($datas);
+    }
 }

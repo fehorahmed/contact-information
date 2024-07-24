@@ -22,6 +22,11 @@ class DistrictController extends Controller
         $district = District::where('division_id', $request->division_id)->get()->toArray();
         return response($district);
     }
+    public function apiGetDistrict(Request $request)
+    {
+        $district = District::where('division_id', $request->division_id)->get();
+        return response($district);
+    }
 
     /**
      * Show the form for creating a new resource.
