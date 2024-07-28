@@ -5,6 +5,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UnionController;
 use App\Http\Controllers\UpazilaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,10 @@ Route::middleware('auth:sanctum', 'throttle:1000,1')->group(function () {
         Route::get('/get-division', [HomeController::class, 'getDivision']);
         Route::get('/get-district', [DistrictController::class, 'apiGetDistrict']);
         Route::get('/get-sub-district', [UpazilaController::class, 'apiGetSubDistrict']);
+        Route::get('/get-unions', [UnionController::class, 'getUnionBySubDistrict']);
         Route::get('/setting', [SettingController::class, 'apiSetting']);
     });
 });
+
+Route::get('/professions', [ProfessionController::class, 'apiIndex']);
+Route::get('/home-search', [HomeController::class, 'apiHomeSearch']);

@@ -57,6 +57,7 @@
                                     <option {{ request()->division == $division->id ? 'selected' : '' }}
                                         value="{{ $division->id }}">{{ $division->name }} </option>
                                 @endforeach
+
                             </select>
                         </div>
                     </div>
@@ -70,10 +71,16 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="mb-2">
-                            <input class="form-control form-control-light" type="text" id="name" name="name"
-                                placeholder="Name...">
+                            <select name="profession" id="profession" class="form-select">
+                                <option value="">Select Profession </option>
+                                @foreach ($professions as $profession)
+                                    <option {{ request()->profession == $profession->id ? 'selected' : '' }}
+                                        value="{{ $profession->id }}">{{ $profession->name }} </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
+
                     <div class="col-lg-3">
                         <div class="mb-2">
                             <button class="btn btn-info">Search</button>
