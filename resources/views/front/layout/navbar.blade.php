@@ -22,10 +22,12 @@
             <li class="nav-item mx-lg-1">
                 <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
             </li>
-
-            <li class="nav-item mx-lg-1">
-                <a class="nav-link" href="">Contact</a>
-            </li>
+            @if (Auth::check())
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link {{ request()->routeIs('address.search') ? 'active' : '' }}"
+                        href="{{ route('address.search') }}">Address Search</a>
+                </li>
+            @endif
         </ul>
         @if (Route::has('login'))
             <ul class="navbar-nav ms-auto align-items-center">

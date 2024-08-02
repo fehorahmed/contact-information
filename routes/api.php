@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum', 'ability:admin', 'throttle:1000,1')->group(fun
     });
 });
 Route::middleware('auth:sanctum', 'ability:user', 'throttle:1000,1')->group(function () {
+    Route::get('/address-search', [HomeController::class, 'apiAddressSearch']);
 });
 
 

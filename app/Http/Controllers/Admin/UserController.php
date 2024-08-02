@@ -513,7 +513,77 @@ class UserController extends Controller
     }
     public function apiUserProfileUpdate(Request $request)
     {
-        dd('Working');
-        return new UserResource($request->user());
+        $rules = [
+            "name" => 'required|string|max:255',
+            "father_name" => 'required|string|max:255',
+            "email" => 'required|string|email|max:255',
+            "phone" => 'required|numeric',
+            "date_of_birth" => 'required|date|max:255',
+            "nid" => 'required|string|max:255',
+            "permanent_division" => 'required|numeric',
+            "permanent_district" => 'required|numeric',
+            "permanent_upazila" => 'required|numeric',
+            "permanent_union" => 'required|numeric',
+            "permanent_ward" => 'required|numeric',
+            "permanent_address" => 'required|string|max:255',
+            "profession" => 'required|string|max:255',
+            "designation" => 'required|string|max:255',
+            "office_phone" => 'required|numeric',
+            "office_division" => 'required|numeric',
+            "office_district" => 'required|numeric',
+            "office_address" => 'required|string|max:255',
+            "image" => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+        ];
+        $validation = Validator::make($request->all(), $rules);
+        if ($validation->fails()) {
+            return response([
+                'status' => false,
+                'message' => $validation->errors()->first()
+            ]);
+        }
+
+        $user = User::find(auth()->id());
+        $user->name = $request->name;
+        $user->father_name = $request->father_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+
+        if ($request->date_of_birth) {
+            $user->date_of_birth =  Carbon::createFromFormat('d-m-Y', $request->date_of_birth)->format('Y-m-d');
+        }
+        // $user->date_of_birth = $request->date_of_birth;
+        $user->nid = $request->nid;
+        $user->per_division_id = $request->permanent_division;
+        $user->per_district_id = $request->permanent_district;
+        $user->per_sub_district_id = $request->permanent_upazila;
+        $user->per_union_id = $request->permanent_union;
+        $user->per_ward_no = $request->permanent_ward;
+        $user->per_address = $request->permanent_address;
+
+        $user->designation = $request->designation;
+        $user->profession_id = $request->profession;
+        $user->off_phone = $request->office_phone;
+        $user->off_division_id = $request->office_division;
+        $user->off_district_id = $request->office_district;
+        $user->off_address = $request->office_address;
+
+        if ($request->hasFile('image')) {
+            $dest = 'profile_photo';
+            $path = saveImage($dest, $request->image, 200, 200);
+            $user->profile_photo_path = $path;
+        }
+
+
+        if ($user->update()) {
+            return response([
+                'status' => true,
+                'message' => 'Your profile updated successfully.'
+            ]);
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'Something went wrong.'
+            ]);
+        }
     }
 }

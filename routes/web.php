@@ -36,6 +36,7 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/my_profile', [UserController::class, 'userProfile'])->name('user.profile');
     Route::post('/my_profile', [UserController::class, 'userProfileUpdate']);
+    Route::get('/address-search', [HomeController::class, 'addressSearch'])->name('address.search');
 });
 
 //Common
