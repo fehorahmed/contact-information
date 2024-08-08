@@ -586,4 +586,32 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function apiUserDelete(Request $request){
+        $rules = [
+            "id" => 'required|numeric',
+        ];
+        $validation = Validator::make($request->all(), $rules);
+        if ($validation->fails()) {
+            return response([
+                'status' => false,
+                'message' => $validation->errors()->first()
+            ]);
+        }
+        $user = User::where(['id'=>$request->id, 'role'=>1])->first();
+        if(!$user){
+            return response([
+                'status'=>false,
+                'message'=>'User not found !!'
+            ]);
+        }
+        if($user->delete()){
+            return response([
+                'status'=>true,
+                'message'=>'User Delete Successfully.'
+            ]);
+        }
+
+
+    }
 }

@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum', 'ability:admin', 'throttle:1000,1')->group(fun
     });
     Route::group(['prefix' => 'admin'], function () {
         Route::post('/setting-update', [SettingController::class, 'apiSettingUpdate']);
+        Route::post('/user-delete', [UserController::class, 'apiUserDelete']);
     });
 });
 Route::middleware('auth:sanctum', 'ability:user', 'throttle:1000,1')->group(function () {
