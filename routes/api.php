@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum', 'ability:user', 'throttle:1000,1')->group(func
 Route::middleware('auth:sanctum', 'throttle:1000,1')->group(function () {
     Route::get('/user', [UserController::class, 'apiUserInfo']);
     Route::post('/user-profile-update', [UserController::class, 'apiUserProfileUpdate']);
-
+    Route::get('/account-delete', [UserController::class, 'apiUserAccountDelete']);
     Route::prefix('common')->group(function () {
         Route::get('/get-division', [HomeController::class, 'getDivision']);
         Route::get('/get-district', [DistrictController::class, 'apiGetDistrict']);
